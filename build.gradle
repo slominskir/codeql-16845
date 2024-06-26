@@ -1,0 +1,14 @@
+plugins {
+    id 'war'
+}
+
+description = 'Example'
+group 'com.example'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    providedCompile 'javax:javaee-api:8.0.1'
+}
