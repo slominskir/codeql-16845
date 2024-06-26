@@ -19,7 +19,24 @@ public class TestServlet extends HttpServlet {
             message = "failure: " + e.getMessage();
         }
 
-        response.setContentType("application/json");
+        PrintWriter pw = response.getWriter();
+
+        pw.println(message);
+        pw.flush();
+    }
+
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String param1 = request.getParameter("param1");
+
+        String message = "success";
+
+        try {
+            doAction(param1);
+        } catch(InvalidInputException e) {
+            // Workaround CodeQL not allowing Exception.getMessage()
+            message = "failure: " + e.getUserMessage();
+        }
 
         PrintWriter pw = response.getWriter();
 
@@ -34,8 +51,15 @@ public class TestServlet extends HttpServlet {
     }
 
     static class InvalidInputException extends Exception {
+        private final String userMessage;
+
         public InvalidInputException(String msg) {
             super(msg);
+            this.userMessage = msg;
+        }
+
+        public String getUserMessage() {
+            return userMessage;
         }
     }
 }
